@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  backend-db:
+    image: postgres:15.3-alpine
+    environment:
+      - POSTGRES_USER=managerpal
+      - POSTGRES_PASSWORD=managerpal
+      - POSTGRES_DB=managerpal
+    volumes:
+      - backend-db_data:/var/lib/postgresql/data/
+    networks:
+      - backend-net
+
+  backend:
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+
+
+networks:
+  backend-net:
+
+volumes:
+  backend-db_data:

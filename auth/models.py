@@ -1,9 +1,24 @@
-from appcore.db import db
+from appcore.db import Base
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 
+class User(Base):
+    __tablename__ = "user"
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(100), unique=True)
-    password = db.Column(db.String(100))
-    name = db.Column(db.String(1000))
+    id = Column(Integer, primary_key=True)
+    email = Column(String(100), unique=True)
+    password = Column(String(100))
+    name = Column(String(1000))
+    updates = relationship("Update", backref="user")
+    tokens = relationship("SecurityToken", backref="user")
+
+class JWT(Base):
+    """
+    Store JWT to allow for authenticated QR code links
+    """
+    __tablename__ ="jwt"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey("user.id"))
+    token = Column()
