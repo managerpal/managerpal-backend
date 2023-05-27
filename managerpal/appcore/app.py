@@ -2,12 +2,14 @@ import sqlalchemy
 
 from flask import Flask, g
 from flask_cors import CORS
+from flask_login import LoginManager
 
 import appcore.config as config
 from appcore.db import db
 
 # Import blueprints
 from auth.views import auth_bp
+from auth.models import User
 from inventory.views import inventory_bp
 
 
@@ -40,6 +42,13 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 
     db.init_app(app)
+    login_manager = LoginManager()
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        # since the user_id is just the primary key of our user table, use it in the query for the user
+        return db.query(User).get(int(user_id))
 
     # register_hooks(app, db)
 
