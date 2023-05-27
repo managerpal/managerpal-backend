@@ -11,6 +11,11 @@ services:
       - backend-db_data:/var/lib/postgresql/data/
     networks:
       - backend-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U managerpal"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   backend:
     container_name: backend
@@ -19,6 +24,16 @@ services:
       dockerfile: Dockerfile
     ports:
       - "5000:5000"
+    depends_on:
+      backend-db:
+        condition: service_healthy
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "10"
+    networks:
+      - backend-net
 
 
 networks:

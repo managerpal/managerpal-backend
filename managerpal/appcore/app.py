@@ -3,11 +3,15 @@ import sqlalchemy
 from flask import Flask, g
 from flask_cors import CORS
 
-import config
-from db import db
+import appcore.config as config
+from appcore.db import db
+
+# Import blueprints
+from auth.views import auth_bp
+from inventory.views import inventory_bp
 
 
-def register_hooks(app):
+def register_hooks(app, db):
     """
     Inspiration from https://github.com/alexferl/flask-simpleldap/blob/master/examples/blueprints/blueprints/app.py
     Just need the before_request to dispose of the previous engine
@@ -34,9 +38,13 @@ def register_hooks(app):
 def create_app():
     app = Flask(__name__)
     app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
-    
+
     db.init_app(app)
-    register_hooks(app)
+
+    # register_hooks(app, db)
+
+    app.register_blueprint(auth_bp, url_prefix="/auth")
+    app.register_blueprint(inventory_bp, url_prefix="/inventory")
     CORS(app)
 
     return app
