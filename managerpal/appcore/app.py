@@ -1,6 +1,6 @@
 import sqlalchemy
 
-from flask import Flask, g
+from flask import Flask, g, redirect, url_for
 from flask_cors import CORS
 from flask_login import LoginManager
 
@@ -56,5 +56,13 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(inventory_bp, url_prefix="/inventory")
     CORS(app)
+
+    """
+    Only for PoC1
+    """
+
+    @app.route("/")
+    def home():
+        return redirect(url_for("auth.index"))
 
     return app

@@ -1,12 +1,35 @@
 import json
 
-from flask import Blueprint, request
+from flask import Blueprint, request, render_template, url_for, redirect
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from appcore.db import db
 from auth.models import User
 
-auth_bp = Blueprint("auth", __name__)
+auth_bp = Blueprint("auth", __name__, template_folder="./templates")
+
+
+@auth_bp.route("/", methods=["GET"])
+def index():
+    return render_template("index.html")
+
+
+@auth_bp.route("/signup", methods=["GET"])
+def signup_view():
+    return render_template("signup.html")
+
+
+@auth_bp.route("/profile")
+@login_required
+def profile():
+    return render_template(
+        "profile.html", name=current_user.name, mail=current_user.email
+    )
+
+
+@auth_bp.route("/login", methods=["GET"])
+def login_view():
+    return render_template("login.html")
 
 
 @auth_bp.route("/login", methods=["POST"])
@@ -24,7 +47,8 @@ def login():
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
-    return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
+    # return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
+    return redirect(url_for("auth.profile"))
 
 
 @auth_bp.route("/signup", methods=["POST"])

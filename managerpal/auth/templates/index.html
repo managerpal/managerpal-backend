@@ -1,0 +1,22 @@
+<!-- templates/index.html -->
+
+{% extends "base.html" %}
+
+{% block content %}
+<div class="column is-4 is-offset-4">
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+      <div class="notification is-success">
+          {{ messages[0] }}
+      </div>
+  {% endif %}
+  {% endwith %}
+</div>
+<h1 class="title">
+  Managerpal placeholder frontend
+</h1>
+<h2 class="subtitle">
+  We were supposed to make an app but submitted wrongly so this is a placeholder frontend for the time being, it'll be an app next milestone.
+  The backend was supposed to be an API only, so if you find any weirdness like you get JSON responses instead of pages that's why
+</h2>
+{% endblock %}
