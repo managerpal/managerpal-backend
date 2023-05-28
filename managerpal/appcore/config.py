@@ -10,6 +10,5 @@ SQLALCHEMY_DATABASE_URI = URL.create(
     username="managerpal",
     password="managerpal",
     host="backend-db",
-    database="managerpal"
+    database="managerpal",
 )
-

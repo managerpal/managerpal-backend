@@ -39,7 +39,9 @@ def register_hooks(app, db):
 
 def create_app():
     app = Flask(__name__)
+
     app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
+    app.config["SECRET_KEY"] = config.SECRET_KEY
 
     db.init_app(app)
     login_manager = LoginManager()
@@ -47,8 +49,7 @@ def create_app():
 
     @login_manager.user_loader
     def load_user(user_id):
-        # since the user_id is just the primary key of our user table, use it in the query for the user
-        return db.query(User).get(int(user_id))
+        return User.query.filter(User.id == int(user_id)).first()
 
     # register_hooks(app, db)
 

@@ -1,18 +1,17 @@
 from appcore.db import db
 from sqlalchemy import Column, Integer, String, ForeignKey, Boolean
 from sqlalchemy.orm import relationship
+from flask_login import UserMixin
 
 
-class User(db.Model):
+class User(UserMixin, db.Model):
     __tablename__ = "user"
-
-    id = Column(Integer, primary_key=True)
-    email = Column(String(100), unique=True)
-    password = Column(String(100))
-    name = Column(String(1000))
-    is_active = Column(Boolean)
-    is_anonymous = Column(Boolean)
-    is_authenticated = Column(Boolean)
+    id = db.Column(
+        db.Integer, primary_key=True
+    )  # primary keys are required by SQLAlchemy
+    email = db.Column(db.String(100), unique=True)
+    password = db.Column(db.String(1000))
+    name = db.Column(db.String(1000))
 
     updates = relationship("Update", back_populates="user_rls")
     # tokens = relationship("jwt", back_populates="user")

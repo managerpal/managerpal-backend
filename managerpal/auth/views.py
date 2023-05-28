@@ -1,7 +1,7 @@
 import json
 
 from flask import Blueprint, request
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from appcore.db import db
 from auth.models import User
@@ -50,7 +50,7 @@ def signup():
     new_user = User(
         email=email,
         name=name,
-        password=generate_password_hash(password, method="sha256"),
+        password=generate_password_hash(password, method="scrypt"),
     )
 
     # add the new user to the database
