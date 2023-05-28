@@ -1,4 +1,5 @@
 import sqlalchemy
+import os
 
 from flask import Flask, g, redirect, url_for
 from flask_cors import CORS
@@ -11,6 +12,8 @@ from appcore.db import db
 from auth.views import auth_bp
 from auth.models import User
 from inventory.views import inventory_bp
+
+basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 def register_hooks(app, db):
@@ -41,6 +44,9 @@ def create_app():
     app = Flask(__name__)
 
     app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
+    # app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
+    # basedir, "database.db"
+    # )
     app.config["SECRET_KEY"] = config.SECRET_KEY
 
     db.init_app(app)
