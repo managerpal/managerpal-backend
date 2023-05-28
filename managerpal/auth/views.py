@@ -81,11 +81,13 @@ def signup():
     db.session.add(new_user)
     db.session.commit()
 
-    return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
+    # return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
+    return redirect(url_for("auth.login"))
 
 
 @auth_bp.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
+    # return json.dumps({"success": True}), 200, {"ContentType": "application/json"}
+    return redirect(url_for("app.index"))
