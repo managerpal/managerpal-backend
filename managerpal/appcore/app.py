@@ -1,7 +1,6 @@
 import os
-import sqlalchemy
 
-from flask import Flask, g, jsonify
+from flask import Flask
 from flask_cors import CORS
 from flask_login import LoginManager
 
