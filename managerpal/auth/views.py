@@ -40,6 +40,7 @@ def signup():
     else:
         data = request.form
     email = data.get("email")
+    email = email.lower()
     name = data.get("name")
     password = data.get("password")
 
