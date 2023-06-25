@@ -16,6 +16,7 @@ def login():
     else:
         data = request.form
     email = data.get("email")
+    email = email.lower()
     password = data.get("password")
     remember = True if data.get("remember") else False
 
