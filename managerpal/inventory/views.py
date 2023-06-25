@@ -99,7 +99,6 @@ def update():
 @login_required
 @inventory_bp.route("/arriving", methods=["GET", "POST"])
 def arriving():
-    print(request.method)
     data = request.form
     try:
         product_id = data.get("product_id", None)
@@ -113,16 +112,18 @@ def arriving():
         )
     if request.method == "GET":
         if product_id:
-            arriving_products = Update.query.filter(
+            arriving_updates = Update.query.filter(
                 arriving=False, product_id=product_id
             )
         else:
-            arriving_products = Update.query.all()
+            arriving_updates = Update.query.all()
         ret = {"items": []}
-        for product in arriving_products:
+        for update in arriving_updates:
             item = {}
-            item["id"] = product.id
-            item["qty"] = product.quantity
+            item["product_id"] = update.product_id
+            item["product_name"] = update.product_rls.name
+            item["id"] = update.id
+            item["qty"] = update.quantity
             ret["items"].append(item)
         return (
             jsonify(ret),
@@ -130,14 +131,14 @@ def arriving():
             {"ContentType": "application/json"},
         )
     elif request.method == "POST":
-        arriving_product = Update.query.filter(id=update_id)
-        if not arriving_product:
+        arriving_updates = Update.query.filter(id=update_id)
+        if not arriving_updates:
             return (
                 jsonify({"success": False, "error": "No product with that ID"}),
                 400,
                 {"ContentType": "application/json"},
             )
-        arriving_product.arrived = True
+        arriving_updates.arrived = True
         db.session.commit()
         return (
             jsonify({"success": True, "error": None}),
