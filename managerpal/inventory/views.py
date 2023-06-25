@@ -8,8 +8,8 @@ from appcore.db import db
 inventory_bp = Blueprint("inventory", __name__)
 
 
-@login_required
 @inventory_bp.route("/list")
+@login_required
 def list_inventory():
     all_products = Product.query.all()
     ret = {"items": []}
@@ -23,8 +23,8 @@ def list_inventory():
     return jsonify(ret)
 
 
-@login_required
 @inventory_bp.route("/add_product", methods=["POST"])
+@login_required
 def add_product():
     if request.is_json:
         data = request.get_json()
@@ -49,8 +49,8 @@ def add_product():
     )
 
 
-@login_required
 @inventory_bp.route("/update", methods=["POST"])
+@login_required
 def update():
     if request.is_json:
         data = request.get_json()
@@ -102,8 +102,8 @@ def update():
     )
 
 
-@login_required
 @inventory_bp.route("/arriving", methods=["GET", "POST"])
+@login_required
 def arriving():
     if request.is_json:
         data = request.get_json()
@@ -120,9 +120,10 @@ def arriving():
             {"ContentType": "application/json"},
         )
     if request.method == "GET":
+        print(product_id)
         if product_id:
-            arriving_updates = Update.query.filter(
-                arriving=False, product_id=product_id
+            arriving_updates = Update.query.filter_by(
+                arrived=False, product_id=product_id
             )
         else:
             arriving_updates = Update.query.all()
@@ -140,7 +141,7 @@ def arriving():
             {"ContentType": "application/json"},
         )
     elif request.method == "POST":
-        arriving_updates = Update.query.filter(id=update_id)
+        arriving_updates = Update.query.filter_by(id=update_id)
         if not arriving_updates:
             return (
                 jsonify({"success": False, "error": "No product with that ID"}),
@@ -156,8 +157,8 @@ def arriving():
         )
 
 
-@login_required
 @inventory_bp.route("/add_item", methods=["POST"])
+@login_required
 def add_items():
     if request.is_json:
         data = request.get_json()
