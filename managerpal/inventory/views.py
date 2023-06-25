@@ -149,8 +149,25 @@ def arriving():
                 400,
                 {"ContentType": "application/json"},
             )
-        arriving_updates.arrived = arrived
-        db.session.commit()
+        # Silently disallow updating to the same arriving
+        if arriving_updates.arrived != arrived:
+            arriving_updates.arrived = arrived
+            arriving_product = arriving_updates.product_rls
+            if not arriving_product.quantity:
+                if arrived:
+                    arriving_product.quantity = arriving_updates.quantity
+                else:
+                    arriving_product.quantity = 0
+            else:
+                if arrived:
+                    arriving_product.quantity = (
+                        arriving_product.quantity + arriving_updates.quantity
+                    )
+                else:
+                    arriving_product.quantity = (
+                        arriving_product.quantity - arriving_updates.quantity
+                    )
+            db.session.commit()
         return (
             jsonify({"success": True, "error": None}),
             200,
