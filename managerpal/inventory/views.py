@@ -134,6 +134,7 @@ def arriving():
             item["product_id"] = update.product_id
             item["product_name"] = update.product_rls.name
             item["id"] = update.id
+            item["date"] = update.date
             item["qty"] = update.quantity
             ret["items"].append(item)
         return (
