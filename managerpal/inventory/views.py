@@ -59,6 +59,7 @@ def update():
     try:
         product_id = data.get("product_id")
         update_type = data.get("action")
+        update_type = update_type.lower()
         price = data.get("price", None)
         arrived = data.get("arrived", True)
         quantity = data.get("quantity")
@@ -83,8 +84,11 @@ def update():
             {"ContentType": "application/json"},
         )
     if arrived:
-        if update_type.lower() == "buy":
+        if update_type == "buy":
             arrived = False
+    if update_type == "sell":
+        product = Product.query.filter_by(id=product_id).first()
+        product.quantity = product.quantity - quantity
     ud = Update(
         product_id=product_id,
         price=price,
