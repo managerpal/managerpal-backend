@@ -85,6 +85,7 @@ def update():
         quantity=quantity,
         date=date,
         arrived=arrived,
+        update_type=update_type,
     )
     db.session.add(ud)
     db.session.commit()

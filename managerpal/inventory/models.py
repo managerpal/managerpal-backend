@@ -38,6 +38,7 @@ class Update(db.Model):
     quantity = Column(
         Integer, nullable=False, comment="Quantity of items added or removed"
     )
+    price = Column(Float, nullable=True)
     product_id = Column(Integer, ForeignKey("product.id"))
     user_id = Column(Integer, ForeignKey("user.id"))
     date = Column(DateTime, default=datetime.datetime.utcnow)
