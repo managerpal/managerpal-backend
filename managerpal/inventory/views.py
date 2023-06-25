@@ -26,7 +26,10 @@ def list_inventory():
 @login_required
 @inventory_bp.route("/add_product", methods=["POST"])
 def add_product():
-    data = request.form
+    if request.json:
+        data = request.get_json()
+    else:
+        data = request.form
     try:
         name = data.get("name")
         quantity = data.get("quantity", None)
@@ -49,7 +52,10 @@ def add_product():
 @login_required
 @inventory_bp.route("/update", methods=["POST"])
 def update():
-    data = request.form
+    if request.json:
+        data = request.get_json()
+    else:
+        data = request.form
     try:
         product_id = data.get("product_id")
         update_type = data.get("action")
@@ -99,7 +105,10 @@ def update():
 @login_required
 @inventory_bp.route("/arriving", methods=["GET", "POST"])
 def arriving():
-    data = request.form
+    if request.json:
+        data = request.get_json()
+    else:
+        data = request.form
     try:
         product_id = data.get("product_id", None)
         if request.method == "POST":
@@ -150,7 +159,10 @@ def arriving():
 @login_required
 @inventory_bp.route("/add_item", methods=["POST"])
 def add_items():
-    data = request.form
+    if request.json:
+        data = request.get_json()
+    else:
+        data = request.form
     name = data.get("name")
     price = data.get("price", None)
     quantity = data.get("quantity")
