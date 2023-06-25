@@ -110,9 +110,11 @@ def arriving():
     else:
         data = request.form
     try:
-        product_id = data.get("product_id", None)
+        # product_id = data.get("product_id", None)
+        product_id = request.args.get("product_id", None)
         if request.method == "POST":
             update_id = data.get("id")
+            arrived = data.get("arrived", False)
     except ValueError as ve:
         return (
             jsonify({"success": False, "error": f"{ve}"}),
@@ -120,13 +122,12 @@ def arriving():
             {"ContentType": "application/json"},
         )
     if request.method == "GET":
-        print(product_id)
         if product_id:
             arriving_updates = Update.query.filter_by(
                 arrived=False, product_id=product_id
             )
         else:
-            arriving_updates = Update.query.all()
+            arriving_updates = Update.query.filter_by(arrived=False)
         ret = {"items": []}
         for update in arriving_updates:
             item = {}
@@ -141,14 +142,14 @@ def arriving():
             {"ContentType": "application/json"},
         )
     elif request.method == "POST":
-        arriving_updates = Update.query.filter_by(id=update_id)
+        arriving_updates = Update.query.filter_by(id=update_id).first()
         if not arriving_updates:
             return (
                 jsonify({"success": False, "error": "No product with that ID"}),
                 400,
                 {"ContentType": "application/json"},
             )
-        arriving_updates.arrived = True
+        arriving_updates.arrived = arrived
         db.session.commit()
         return (
             jsonify({"success": True, "error": None}),
