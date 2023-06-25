@@ -11,7 +11,7 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    if request.json:
+    if request.is_json:
         data = request.get_json()
     else:
         data = request.form
@@ -34,7 +34,7 @@ def login():
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
     # Workaround to accept both application/json and multipart data
-    if request.json:
+    if request.is_json:
         data = request.get_json()
     else:
         data = request.form

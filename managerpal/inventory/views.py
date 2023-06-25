@@ -26,7 +26,7 @@ def list_inventory():
 @login_required
 @inventory_bp.route("/add_product", methods=["POST"])
 def add_product():
-    if request.json:
+    if request.is_json:
         data = request.get_json()
     else:
         data = request.form
@@ -52,7 +52,7 @@ def add_product():
 @login_required
 @inventory_bp.route("/update", methods=["POST"])
 def update():
-    if request.json:
+    if request.is_json:
         data = request.get_json()
     else:
         data = request.form
@@ -105,7 +105,7 @@ def update():
 @login_required
 @inventory_bp.route("/arriving", methods=["GET", "POST"])
 def arriving():
-    if request.json:
+    if request.is_json:
         data = request.get_json()
     else:
         data = request.form
@@ -159,7 +159,7 @@ def arriving():
 @login_required
 @inventory_bp.route("/add_item", methods=["POST"])
 def add_items():
-    if request.json:
+    if request.is_json:
         data = request.get_json()
     else:
         data = request.form
