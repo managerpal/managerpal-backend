@@ -12,6 +12,7 @@ class Product(db.Model):
     name = Column(String, nullable=False, comment="Name of item")
     price = Column(Float, nullable=True, comment="Price of item")  # Might not be using
     quantity = Column(Integer, nullable=True, comment="Quantity of item left")
+    sku = Column(String, nullable=True, comment="SKU of product")
 
     updates = relationship("Update", back_populates="product_rls")
     items = relationship("Item", back_populates="product_rls")
