@@ -17,8 +17,9 @@ def list_inventory():
         "quantity",
     ]
     all_products = Product.query.all()
-    sort = request.args.get("sort").lower()
+    sort = request.args.get("sort")
     if sort:
+        sort = sort.lower()
         if sort not in valid_sorts:
             return (
                 jsonify(
