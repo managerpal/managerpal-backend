@@ -254,7 +254,7 @@ def add_items():
 
 @inventory_bp.route("/product_detailed", methods=["GET"])
 @login_required
-def add_items():
+def product_detailed():
     id = request.args.get("id")
     date_range = request.args.get("dates", None)
     if date_range:
