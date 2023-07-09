@@ -54,10 +54,21 @@ def list_updates():
     product_id = request.args.get("product_id")
     num = request.args.get("num")
     num = int(num)  # Validate with marshmallow later
+    date_range = request.args.get("dates", None)
+    if date_range:
+        start_date, end_date = date_range.split(",")
+        start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+        end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
     if product_id:
         updates = Update.query.filter_by(product_id=product_id)
     else:
         updates = Update.query.all()
+    if date_range:
+        updates = (
+            updates.filter(Update.date >= start_date)
+            .filter(Update.date <= end_date)
+            .all()
+        )
     if num:
         updates.limit(num)
     ret = []
@@ -259,7 +270,7 @@ def product_detailed():
     id = request.args.get("id")
     date_range = request.args.get("dates", None)
     if date_range:
-        start_date, end_date = date_range.split(" to ")
+        start_date, end_date = date_range.split(",")
         start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
         end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
     if not id:
