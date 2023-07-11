@@ -53,7 +53,6 @@ def list_inventory():
 def list_updates():
     product_id = request.args.get("product_id")
     num = request.args.get("num")
-    num = int(num)  # Validate with marshmallow later
     date_range = request.args.get("dates", None)
     if date_range:
         start_date, end_date = date_range.split(",")
@@ -70,6 +69,7 @@ def list_updates():
             .all()
         )
     if num:
+        num = int(num)  # Validate with marshmallow later
         updates.limit(num)
     ret = []
     for update in updates:
