@@ -76,6 +76,7 @@ def list_updates():
         upd = {}
         upd["id"] = update.id
         upd["product_id"] = update.product_id
+        upd["qty"] = update.quantity
         upd["price"] = update.price
         upd["action"] = update.update_type
         upd["arrived"] = update.arrived
@@ -267,7 +268,7 @@ def add_items():
 @inventory_bp.route("/product_detailed", methods=["GET"])
 @login_required
 def product_detailed():
-    id = request.args.get("id")
+    id = request.args.get("product_id")
     date_range = request.args.get("dates", None)
     if date_range:
         start_date, end_date = date_range.split(",")
@@ -289,14 +290,34 @@ def product_detailed():
         )
     else:
         updates = updates.all()
-    qty_change = 0
+    qty_change = 0  # qty arrived - qty sold
     total_sold = 0
     total_bought = 0
-
+    total_arrived = 0
+    total_revenue = 0
+    total_expense = 0
     for update in updates:
         update: Update = update
         utype = update.update_type
         if utype == "arrived":
             qty_change += update.quantity
+            total_arrived += update.quantity
+        elif utype == "sell":
+            qty_change -= update.quantity
+            total_sold += update.quantity
+            total_revenue += update.price * update.quantity
+        elif utype == "buy":
             total_bought += update.quantity
-    # TBD
+            total_expense += update.price * update.quantity
+    profit = total_revenue - total_expense
+    return jsonify(
+        {
+            "product_id": id,
+            "total_sold": total_sold,
+            "total_bought": total_bought,
+            "total_arrived": total_arrived,
+            "total_revenue": total_revenue,
+            "total_expense": total_expense,
+            "profit": profit,
+        }
+    )
