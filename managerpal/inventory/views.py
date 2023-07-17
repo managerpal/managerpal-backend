@@ -83,7 +83,11 @@ def list_updates():
         upd["date"] = update.date
         ret.append(upd)
 
-    return jsonify(ret)
+    return (
+        jsonify(ret),
+        200,
+        {"ContentType": "application/json"},
+    )
 
 
 @inventory_bp.route("/add_product", methods=["POST"])
@@ -310,14 +314,18 @@ def product_detailed():
             total_bought += update.quantity
             total_expense += update.price * update.quantity
     profit = total_revenue - total_expense
-    return jsonify(
-        {
-            "product_id": id,
-            "total_sold": total_sold,
-            "total_bought": total_bought,
-            "total_arrived": total_arrived,
-            "total_revenue": total_revenue,
-            "total_expense": total_expense,
-            "profit": profit,
-        }
+    return (
+        jsonify(
+            {
+                "product_id": id,
+                "total_sold": total_sold,
+                "total_bought": total_bought,
+                "total_arrived": total_arrived,
+                "total_revenue": total_revenue,
+                "total_expense": total_expense,
+                "profit": profit,
+            }
+        ),
+        200,
+        {"ContentType": "application/json"},
     )
