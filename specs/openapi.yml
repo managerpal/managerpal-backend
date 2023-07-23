@@ -1,0 +1,164 @@
+openapi: 3.0.3
+info:
+  title: Managerpal Prod
+  version: 1.0.0
+  contact: {}
+servers:
+  - url: http://managerpal.seewhyjay.dev
+  - url: https://managerpal.seewhyjay.dev
+paths:
+  /auth/signup:
+    post:
+      summary: Signup
+      description: Signup
+      operationId: signup
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: test@test.com
+                name:
+                  type: string
+                  example: test
+                password:
+                  type: string
+                  example: 'Test1234!'
+      responses:
+        '200':
+          description: ''
+  /auth/login:
+    post:
+      summary: Login
+      description: Login
+      operationId: login
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: Test@test.com
+                name:
+                  type: string
+                  example: test
+                password:
+                  type: string
+                  example: Test1234@
+      responses:
+        '200':
+          description: ''
+  /inventory/arriving:
+    get:
+      summary: Arriving
+      description: List arriving products
+      operationId: arriving
+      parameters:
+        - name: product_id
+          required: true
+          in: query
+          schema:
+            type: integer
+            example: 4
+      responses:
+        '200':
+          description: ''
+  /inventory/list_updates:
+    get:
+      summary: List updates
+      description: List updates
+      operationId: listUpdates
+      responses:
+        '200':
+          description: ''
+  /inventory/update:
+    post:
+      summary: Create update
+      description: Create update
+      operationId: createUpdate
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  example: buY
+                date:
+                  type: string
+                  example: '2023-06-25'
+                price:
+                  type: string
+                  example: '100.00'
+                product_id:
+                  type: string
+                  example: '4'
+                quantity:
+                  type: string
+                  example: '500'
+      responses:
+        '200':
+          description: ''
+  /inventory/add_product:
+    post:
+      summary: Create Product
+      description: Create Product
+      operationId: createProduct
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                action:
+                  type: string
+                  example: Buy
+                date:
+                  type: string
+                  example: '2023-06-25'
+                name:
+                  type: string
+                  example: 'Logitech G402'
+                price:
+                  type: string
+                  example: '100.00'
+                quantity:
+                  type: integer
+                  example: 500
+      responses:
+        '200':
+          description: ''
+  /inventory/list_products:
+    get:
+      summary: List all products
+      description: List all products
+      operationId: listAllProducts
+      responses:
+        '200':
+          description: ''
+  /inventory/product_detailed:
+    get:
+      summary: Product detailed breakdown
+      description: Product detailed breakdown
+      operationId: productDetailedBreakdown
+      parameters:
+        - name: product_id
+          in: query
+          schema:
+            type: string
+            example: '4'
+        - name: dates
+          in: query
+          schema:
+            type: string
+            example: 2023-02-13,2023-07-19
+      responses:
+        '200':
+          description: ''
+tags: []
