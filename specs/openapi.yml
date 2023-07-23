@@ -73,9 +73,30 @@ paths:
       summary: List updates
       description: List updates
       operationId: listUpdates
+      parameters:
+        - name: product_id
+          required: false
+          in: query
+          schema:
+            type: integer
+            example: 1
+        - name: num
+          required: false
+          in: query
+          schema:
+            type: integer
+            example: 100
+            description: Number of results to return, useful for pagination
+        - name: dates
+          required: false
+          in: query
+          schema:
+            type: string
+            example: '2023-02-13,2023-07-19'
+            description: Return results within this date range.
       responses:
         '200':
-          description: ''
+          description: 'A list of updates with their details for a particular product or all products'
   /inventory/update:
     post:
       summary: Create update
@@ -89,7 +110,7 @@ paths:
               properties:
                 action:
                   type: string
-                  example: buY
+                  example: Buy
                 date:
                   type: string
                   example: '2023-06-25'
@@ -133,15 +154,24 @@ paths:
                   example: 500
       responses:
         '200':
-          description: ''
+          description: 'Successfully added product'
+        '400':
+          description: 'Unsuccessful, will show errors under "errors"'
   /inventory/list_products:
     get:
       summary: List all products
       description: List all products
       operationId: listAllProducts
+      parameters:
+        - name: sort
+          in: query
+          required: false
+          schema:
+            type: string
+            enum: [price, quantity]
       responses:
         '200':
-          description: ''
+          description: 'A list of all products.'
   /inventory/product_detailed:
     get:
       summary: Product detailed breakdown
@@ -158,6 +188,7 @@ paths:
           schema:
             type: string
             example: 2023-02-13,2023-07-19
+            description: Return results within this date range.
       responses:
         '200':
           description: ''
