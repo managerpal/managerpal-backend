@@ -17,13 +17,14 @@ def create_app():
     app = Flask(__name__)
 
     app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
+
+    app.config["SECRET_KEY"] = config.SECRET_KEY
     if os.environ.get("is_dev", False):
         basedir = os.path.abspath(os.path.dirname(__file__))
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
             basedir, "database.db"
         )
-    app.config["SECRET_KEY"] = config.SECRET_KEY
-
+        app.config["SECRET_KEY"] = "asdas123asdasd"
     db.init_app(app)
     login_manager = LoginManager()
     login_manager.init_app(app)
