@@ -11,9 +11,14 @@ auth_bp = Blueprint("auth", __name__)
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    email = request.form.get("email")
-    password = request.form.get("password")
-    remember = True if request.form.get("remember") else False
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form
+    email = data.get("email")
+    email = email.lower()
+    password = data.get("password")
+    remember = True if data.get("remember") else False
 
     user = db.session.query(User).filter_by(email=email).first()
 
@@ -29,9 +34,15 @@ def login():
 
 @auth_bp.route("/signup", methods=["POST"])
 def signup():
-    email = request.form.get("email")
-    name = request.form.get("name")
-    password = request.form.get("password")
+    # Workaround to accept both application/json and multipart data
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form
+    email = data.get("email")
+    email = email.lower()
+    name = data.get("name")
+    password = data.get("password")
 
     user = (
         db.session.query(User).filter_by(email=email).first()
