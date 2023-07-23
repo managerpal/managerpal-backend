@@ -1,7 +1,4 @@
 import pytest
-import os
-from flask import Flask
-from flask.testing import FlaskClient
 
 
 # Import the app factory function

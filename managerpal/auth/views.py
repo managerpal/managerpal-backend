@@ -1,7 +1,7 @@
 import json
 
 from flask import Blueprint, request
-from flask_login import login_user, logout_user, login_required, current_user
+from flask_login import login_user, logout_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 from appcore.db import db
 from auth.models import User
@@ -23,7 +23,8 @@ def login():
     user = db.session.query(User).filter_by(email=email).first()
 
     # check if user actually exists
-    # take the user supplied password, hash it, and compare it to the hashed password in database
+    # take the user supplied password, hash it
+    # and compare it to the hashed password in database
     if not user or not check_password_hash(user.password, password):
         return json.dumps({"success": False}), 400, {"ContentType": "application/json"}
 
@@ -48,16 +49,17 @@ def signup():
         db.session.query(User).filter_by(email=email).first()
     )  # if this returns a user, then the email already exists in database
 
-    if (
-        user
-    ):  # if a user is found, we want to redirect back to signup page so user can try again
+    if user:
+        # if a user is found,
+        # we want to redirect back to signup page so user can try again
         return (
             json.dumps({"success": False, "error": "Email already exists"}),
             400,
             {"ContentType": "application/json"},
         )
 
-    # create new user with the form data. Hash the password so plaintext version isn't saved.
+    # create new user with the form data.
+    # Hash the password so plaintext version isn't saved.
     new_user = User(
         email=email,
         name=name,

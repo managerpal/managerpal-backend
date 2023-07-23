@@ -1,7 +1,7 @@
 import datetime
 from flask import Blueprint, jsonify, request
 from flask_login import login_required
-from inventory.models import Product, Item, Update
+from inventory.models import Product, Update
 from sqlalchemy import desc
 
 from appcore.db import db
@@ -25,7 +25,7 @@ def list_inventory():
                 jsonify(
                     {
                         "success": False,
-                        "error": f"No such sort exists!",
+                        "error": "No such sort exists!",
                     }
                 ),
                 400,
@@ -101,9 +101,9 @@ def add_product():
         name = data.get("name")
         sku = data.get("sku")
         quantity = data.get("quantity", None)
-    except ValueError as ve:
+    except ValueError:
         return (
-            jsonify({"success": False, "error": f"'name' is missing from request"}),
+            jsonify({"success": False, "error": "'name' is missing from request"}),
             400,
             {"ContentType": "application/json"},
         )
