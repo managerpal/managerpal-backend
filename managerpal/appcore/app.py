@@ -13,16 +13,16 @@ from auth.models import User
 from inventory.views import inventory_bp
 
 
-def create_app():
+def create_app(test: bool = False, temp_sqlite_uri: str = None):
     app = Flask(__name__)
 
     app.config["SQLALCHEMY_DATABASE_URI"] = config.SQLALCHEMY_DATABASE_URI
 
     app.config["SECRET_KEY"] = config.SECRET_KEY
-    if os.environ.get("is_dev", False):
+    if os.environ.get("is_dev", False) or app.config["TESTING"] or test:
         basedir = os.path.abspath(os.path.dirname(__file__))
         app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///" + os.path.join(
-            basedir, "database.db"
+            basedir, "database.db" if not temp_sqlite_uri else temp_sqlite_uri
         )
         app.config["SECRET_KEY"] = "asdas123asdasd"
     db.init_app(app)

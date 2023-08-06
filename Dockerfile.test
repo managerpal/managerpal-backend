@@ -1,0 +1,15 @@
+FROM python:3.11-alpine
+WORKDIR /home/managerpal
+
+COPY requirements.txt /home/managerpal/requirements.txt
+RUN pip install -r requirements.txt
+RUN pip install psycopg2-binary
+RUN pip install pytest
+COPY . /home/managerpal
+
+WORKDIR /home/managerpal/
+# RUN pip install gunicorn
+
+ENV is_dev=True
+# RUN pytest
+CMD pytest .
